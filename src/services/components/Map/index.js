@@ -9,13 +9,10 @@ import api from "../../api"
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export class Map extends Component {
-  
-  state = {
-      coordinates: {points:[
-        {latitude: -22.2542, longitude: -45.2710},
-        {latitude: -22.2552, longitude: -45.2710},
-        {latitude: -22.2562, longitude: -45.2710},
-    ]},
+  constructor(props){
+    super(props)
+this.state = {
+      coordinates: {points:[]},
       latitude: -22.2532,
       longitude: -45.2710,
     viewport: {
@@ -23,10 +20,13 @@ export class Map extends Component {
       height: window.innerHeight,
       latitude: -22.2532,
       longitude: -45.2710,
-      zoom: 14,
+      zoom: 8,
     },
   };
-
+  this.fireFire =this.findFire.bind(this)
+  this.setState = this.setState.bind(this)
+  }
+  
   componentWillMount(){
     console.log("oi");
   }
@@ -37,9 +37,28 @@ export class Map extends Component {
 
   }
 
-  async findFire(){
+   findFire=async()=>{
     const fire = await api.get("/teste");
-    console.log(fire);
+    console.log(fire.data[0].latitude)
+    let that=this;
+    const fireArray= []
+    let i = 0;
+    fire.data.slice(10).forEach(element => {
+      console.log(element)
+      fireArray.push({
+        latitude: Number.parseFloat(element.latitude),
+        longitude:Number.parseFloat( element.longitude)
+      })
+      
+    });
+    this.setState({
+        ...this.state,
+        coordinates:{
+          points:fireArray
+        }
+      })
+    console.log(this.state.coordinates.points)
+
   }
 
   componentWillUnmount() {
