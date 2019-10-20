@@ -3,12 +3,19 @@ import React, { Component, Fragment, useState } from 'react';
 import MapGL, { Marker } from 'react-map-gl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import "../../../../src/topBarStyle.css"
+import api from "../../api"
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export class Map extends Component {
   
   state = {
+      coordinates: {points:[
+        {latitude: -22.2542, longitude: -45.2710},
+        {latitude: -22.2552, longitude: -45.2710},
+        {latitude: -22.2562, longitude: -45.2710},
+    ]},
       latitude: -22.2532,
       longitude: -45.2710,
     viewport: {
@@ -20,13 +27,24 @@ export class Map extends Component {
     },
   };
 
+  componentWillMount(){
+    console.log("oi");
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this._resize);
     this._resize();
+
+  }
+
+  async findFire(){
+    const fire = await api.get("/teste");
+    console.log(fire);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
+    window.removeEventListener('resize', this._resize);  
+    
   }
 
   _resize = () => {
@@ -69,14 +87,14 @@ export class Map extends Component {
   render() {
     return (
         <Fragment>
-            <form onSubmit={() => {}}>
-                <br />
+            <form class="top-bar">
               <span>Latitude: </span>
-              <input id="latitude" value={this.state.latitude} onChange={this.setLatitude}/> 
+              <input class="inputs" id="latitude" value={this.state.latitude} onChange={this.setLatitude}/> 
               <span> Longitude: </span>
-              <input id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>
+              <input class="inputs" id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>
               <br /><br />
             </form>
+            <button onClick={this.findFire}>Achar focos</button>
 
             
       <MapGL
@@ -102,6 +120,28 @@ export class Map extends Component {
             src="https://i7.pngguru.com/preview/200/363/803/computer-icons-check-in-icon.jpg"
           />
         </Marker>
+
+        {this.state.coordinates.points.map(point => {
+            console.log(point)
+          return (
+            <Marker
+              latitude={point.latitude}
+              longitude={point.longitude}
+              offsetLeft={-15}
+              offsetTop={-10}
+            >
+              <img
+            alt="avatar"
+            style={{
+              borderRadius: 100,
+              width: 48,
+              height: 48,
+            }}
+            src="https://cdn1.iconfinder.com/data/icons/natural-world/360/fire-flame_20-512.png"
+          />
+            </Marker>
+          );
+        })}
       </MapGL>
       </Fragment>
     );
