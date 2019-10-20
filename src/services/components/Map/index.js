@@ -87,15 +87,17 @@ export class Map extends Component {
   render() {
     return (
         <Fragment>
-            <form class="top-bar">
-              <span>Latitude: </span>
-              <input class="inputs" id="latitude" value={this.state.latitude} onChange={this.setLatitude}/> 
-              <span> Longitude: </span>
-              <input class="inputs" id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>
-              <br /><br />
-            </form>
+            <div class="top-bar">
+                <form id="formulario">
+                  <span>Latitude: </span>
+                  <input class="inputs" id="latitude" value={this.state.latitude} onChange={this.setLatitude}/> 
+                  <span> Longitude: </span>
+                  <input class="inputs" id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>     
+                </form>
             <button onClick={this.findFire}>Achar focos</button>
 
+            </div>
+            
             
       <MapGL
         {...this.state.viewport}
