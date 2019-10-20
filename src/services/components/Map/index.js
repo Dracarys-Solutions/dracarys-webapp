@@ -51,7 +51,6 @@ export class Map extends Component {
         ...this.state.viewport,
         latitude: Number.parseFloat(e.target.value),
         }
-        // [this.state.viewport.latitude]: e.target.value
     })
   }
 
@@ -62,8 +61,7 @@ export class Map extends Component {
         viewport: {
             ...this.state.viewport,
             longitude: Number.parseFloat(e.target.value),
-            }
-        // [this.state.viewport.longitude]: e.target.value    
+            }  
     })
   }
 
