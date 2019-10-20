@@ -15,6 +15,7 @@ this.state = {
       coordinates: {points:[]},
       latitude: -22.2532,
       longitude: -45.2710,
+      raio:100,
     viewport: {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -40,16 +41,23 @@ this.state = {
    findFire=async()=>{
     const fire = await api.get("/teste");
     console.log(fire.data[0].latitude)
-    let that=this;
+  
     const fireArray= []
-    let i = 0;
+    
     fire.data.slice(10).forEach(element => {
-      console.log(element)
-      fireArray.push({
-        latitude: Number.parseFloat(element.latitude),
-        longitude:Number.parseFloat( element.longitude)
-      })
       
+      let raio_ang = this.state.raio/111.195
+      if(element.latitude-this.state.viewport.latitude < raio_ang && element.longitude - this.state.viewport.latitude < raio_ang){
+          let distance=Math.pow(Number.parseFloat(element.latitude)-this.state.viewport.latitude,2)
+          distance+=Math.pow(Number.parseFloat(element.longitude)-this.state.viewport.longitude,2)
+          distance = Math.pow(distance, (1/2))
+          if(distance < raio_ang){
+            fireArray.push({
+                latitude: Number.parseFloat(element.latitude),
+                longitude:Number.parseFloat( element.longitude)
+              })
+            }
+        }
     });
     this.setState({
         ...this.state,
@@ -57,6 +65,7 @@ this.state = {
           points:fireArray
         }
       })
+    
     console.log(this.state.coordinates.points)
 
   }
