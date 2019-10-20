@@ -43,6 +43,8 @@ this.state = {
     console.log(fire.data[0].latitude)
   
     const fireArray= []
+    let fator=0
+    
     
     fire.data.slice(10).forEach(element => {
       
@@ -52,10 +54,23 @@ this.state = {
           distance+=Math.pow(Number.parseFloat(element.longitude)-this.state.viewport.longitude,2)
           distance = Math.pow(distance, (1/2))
           if(distance < raio_ang){
+            if(element.confidence==="nominal"){
+              fator=0.6
+            }
+            else if(element.confidence==="low"){
+              fator=0.3
+            }
+            else{
+              fator=1
+            }
+
             fireArray.push({
                 latitude: Number.parseFloat(element.latitude),
-                longitude:Number.parseFloat( element.longitude)
+                longitude:Number.parseFloat( element.longitude),
+                confidence: fator
+      
               })
+            
             }
         }
     });
@@ -110,6 +125,13 @@ this.state = {
             }  
     })
   }
+  setRaio = (e) => {
+    this.setState({
+        ...this.state,
+        [e.target.id]: e.target.value,
+        raio: e.target.value  
+    })
+  }
 
 
   render() {
@@ -120,7 +142,9 @@ this.state = {
                   <span>Latitude: </span>
                   <input class="inputs" id="latitude" value={this.state.latitude} onChange={this.setLatitude}/> 
                   <span> Longitude: </span>
-                  <input class="inputs" id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>     
+                  <input class="inputs" id="longitude" value={this.state.longitude} onChange={this.setLongitude}/>
+                  <span> Raio: </span>
+                  <input class="inputs" id="raio" value={this.state.raio} onChange={this.setRaio}/>     
                 </form>
             <button onClick={this.findFire}>Achar focos</button>
 
