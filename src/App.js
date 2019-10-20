@@ -1,19 +1,14 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import Routes from './routes';
+import React, {useState, Fragment} from 'react';
+import Map from '../src/services/components/Map';
+
 function App() {
+
   return (
-    <div className="App">
-      <form>
-        <h3>Latitude: </h3>
-        <input />
-        <br />
-        <h3>Longitude: </h3>
-        <input />
-        <br /> <br />
-        <button type="submit">OK</button>
-      </form>
-    </div>
+    <Fragment>
+      <div className="App">
+        <Map/>
+      </div>
+    </Fragment>
   );
 }
 
